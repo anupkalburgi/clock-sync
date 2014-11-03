@@ -3,7 +3,7 @@ import sys
 import time
 import signal
 
-HOST, PORT = "localhost", 9999
+HOST, PORT = "zeus.vse.gmu.edu", 9999
 
 #zeus.vse.gmu.edu
 # SOCK_DGRAM is the socket type to use for UDP sockets
@@ -41,7 +41,7 @@ for seq in numbers:
         #print exc
         continue
     print "Sent:     {}".format(pay_load)
-    print "Received: {}".format(received)
+    print "Received: {} {:f}".format(received,time.time() )
     time.sleep(10)
 
 
