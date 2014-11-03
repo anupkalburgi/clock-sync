@@ -13,15 +13,13 @@ class UDPHandler(SocketServer.BaseRequestHandler):
         return func(*data)
 
     def handle(self):
-    	received_time =  time.time()
+    	req_time = '%f' % time.time()
         data = self.request[0].strip().split(" ")
         socket = self.request[1]
-        print "{} wrote:".format(self.client_address[0])
         seq =  data[0]
         client_time_stamp = data[1]
-        server_time = time.time() 
-        pay_load = seq + " " + client_time_stamp + " " + str(received_time) + " " + str(server_time)
-        socket.sendto( pay_load , self.client_address)
+        #pay_load = seq + " " +  client_time_stamp + " " + req_time + " " + '%f' % time.time()
+        socket.sendto( seq + " " +  client_time_stamp + " " + req_time + " " + '%f' % time.time() , self.client_address)
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999

@@ -3,7 +3,9 @@ import sys
 import time
 import signal
 
-HOST, PORT = "zeus.vse.gmu.edu", 9999
+HOST, PORT = "localhost", 9999
+
+#zeus.vse.gmu.edu
 # SOCK_DGRAM is the socket type to use for UDP sockets
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -30,7 +32,7 @@ signal.signal(signal.SIGALRM, handler)
 
 numbers = gen_numbers()
 for seq in numbers:
-    pay_load =  str(seq) +" "+ str(time.time())
+    pay_load =  str(seq) +" "+ "%f" % time.time()
     sock.sendto(pay_load , (HOST, PORT))
     signal.alarm(11)
     try:
