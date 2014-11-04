@@ -13,6 +13,14 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
 logger.setLevel(logging.INFO)
 
+
+cal_logger = logging.getLogger("CAL_LOGGER")
+cal_hdlr = logging.FileHandler('CAL_LOG.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+cal_hdlr.setFormatter(formatter)
+cal_logger.addHandler(cal_hdlr)
+cal_logger.setLevel(logging.INFO)
+
 #zeus.vse.gmu.edu
 # SOCK_DGRAM is the socket type to use for UDP sockets
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -28,6 +36,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 def handler(signum, frame):
     print "Did Not hearback form the server"
     print frame.f_locals['pay_load']
+    logger.error("Failed SEQ_NO: {}".format(frame.f_locals['pay_load']))
     return "Exception(\s\"end of time\")"
 
 def gen_numbers():
@@ -46,10 +55,19 @@ for seq in numbers:
     try:
         received = sock.recv(1024)
     except:
-        #print exc
         continue
-    print "Sent:     {}".format(pay_load)
-    logger.info("{} {:f}".format(received,time.time()) )
+    client_rec = "{} {:f}".format(received,time.time())
+    logger.info( client_rec)
+    data = client_rec.split(" ")
+    rec_seq = data[0]
+    if seq == int(rec_seq):
+        rtt =  (float(data[2]) - float(data[1])) + (float(data[4]) - float(data[3])) 
+        theta = (float(data[2]) - float(data[1]) ) - (  float(data[4]) - float(data[3]) ) /2.00
+        cal_logger.info(  str(rtt) + " "+ str(theta) )
+    else:
+        log_string = "Response out of order {}".format(received) 
+        logger.info( log_string )
+
     #print "Received: {} {:f}".format(received,time.time() )
     time.sleep(10)
 
