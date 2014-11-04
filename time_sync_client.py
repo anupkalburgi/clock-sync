@@ -2,6 +2,7 @@ import socket
 import sys
 import time
 import signal
+from collections import deque
 
 HOST, PORT = "zeus.vse.gmu.edu", 9999
 
@@ -46,7 +47,7 @@ def gen_numbers():
         i = i + 1 
 
 signal.signal(signal.SIGALRM, handler)
-
+last_eight_interactions = deque([0,0,0,0,0,0,0,0], 8)
 numbers = gen_numbers()
 for seq in numbers:
     pay_load =  str(seq) +" "+ "%f" % time.time()
@@ -63,7 +64,9 @@ for seq in numbers:
     if seq == int(rec_seq):
         rtt =  (float(data[2]) - float(data[1])) + (float(data[4]) - float(data[3])) 
         theta = (float(data[2]) - float(data[1]) ) - (  float(data[4]) - float(data[3]) ) /2.00
+        last_eight_interactions.append( (rtt,theta) ) 
         cal_logger.info(  str(rtt) + " "+ str(theta) )
+        print min(last_eight_interactions)
     else:
         log_string = "Response out of order {}".format(received) 
         logger.info( log_string )
