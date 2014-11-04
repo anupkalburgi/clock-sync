@@ -19,7 +19,7 @@ class UDPHandler(SocketServer.BaseRequestHandler):
         seq =  data[0]
         client_time_stamp = data[1]
         #pay_load = seq + " " +  client_time_stamp + " " + req_time + " " + '%f' % time.time()
-        socket.sendto( seq + " " +  client_time_stamp + " " + req_time + " " + '%f' % time.time() , self.client_address)
+        socket.sendto( seq + " " +  client_time_stamp + " " + req_time + " " + '%f' % time.time() )
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999

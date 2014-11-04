@@ -5,6 +5,14 @@ import signal
 
 HOST, PORT = "zeus.vse.gmu.edu", 9999
 
+import logging
+logger = logging.getLogger('TIMESYNC')
+hdlr = logging.FileHandler('time_sync_client.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr) 
+logger.setLevel(logging.INFO)
+
 #zeus.vse.gmu.edu
 # SOCK_DGRAM is the socket type to use for UDP sockets
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -41,7 +49,8 @@ for seq in numbers:
         #print exc
         continue
     print "Sent:     {}".format(pay_load)
-    print "Received: {} {:f}".format(received,time.time() )
+    logger.info("{} {:f}".format(received,time.time()) )
+    #print "Received: {} {:f}".format(received,time.time() )
     time.sleep(10)
 
 
