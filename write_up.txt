@@ -1,0 +1,56 @@
+Number of interactions that failed:
+breeze_logs->$awk '$4  ~ /Failed/ {n++} END { print n}' time_sync_client.log 
+171
+Total Number of Interations that failed:	171
+Total number of interations   		   :	8495
+
+So 2.01% of the requests have failed .
+
+
+
+Average RTT
+breeze_logs->$awk '{s+=$4 ; n++ } END { if (n > 0) print s,n, (s*1000/n) }' CAL_LOG.log 
+636.243 8495 74.8962
+
+
+
+TIME_DIFF_BTW_SERVER_CLINET(for every 10sec ) = Theta for each record 
+DRIFT = TIME_DIFF_BTW_SERVER_CLINET*1000ms/10s
+
+The One Where if Smoothing factor is used 
+breeze_logs->$awk '{s+=$6 ; n++ } END { if (n > 0) print s,n, (s/n*1000)/10 }' CAL_LOG.log 
+323.141 8497 3.803 (The histogram might say it as 1.4 to be the averge that is because while plotting the graph i have 
+left out the exteme vaues to save make the graph look like a graph)
+
+That is 3.803 msec/sec
+
+The One Where if Smoothing factor is not used 
+breeze_logs->$awk '{s+=$5 ; n++ } END { if (n > 0) print s,n, (s/n*1000)/10 }' CAL_LOG.log 
+647.36 8495 7.62048
+
+That is 7.62048 msec/sec
+
+If we compare both of them, we have a huge difference in average Drift rate. And thus it makes sense to use
+the one woth smoothenes factor
+
+
+============================================================================================================
+
+
+
+
+
+--CLIPPED-- 
+2014-11-05 15:30:35,724 INFO 15.0259764194 15.0280131102 5.01973307133
+2014-11-05 05:52:06,008 INFO 15.0798683167 15.0795711279 0.0129438638687
+
+
+
+
+
+ 
+
+
+
+
+

@@ -1,0 +1,29 @@
+Question 5:
+-----------
+
+Used Python.
+Becasue I knew how to implement timeout, process the log file, and a bit about MetaplotLib to generate the graph. 
+
+
+Running the Code:
+python server_time_sync.py  -- Starts the Sync Server 
+python time_sync_client.py  -- Starts the Cleint talking to the server
+
+
+Corrected_time = Present_clock + Correction_factor
+Drift_Of_my_clock = Corrected_time - Present_clock 
+i.e ø is by drift. 
+
+CAL_LOG has RTT CORRECTION FACTOR(ø) and SMOOTH Correction Factor(ø)
+
+Average = SUM of all ø / No. of Drifts
+
+
+TimeOut Picked was 10s (I am not really sure that was wise decesion, but after getting the results i realised it was not so bad after all I had around 171 lost packets out of 84970~. But next time when i am doing this i will choose something very less than this)
+I think ideally it should be setting it to ~20ms as that is the RTT that ping reports. But for this application as we had an arrangement of sending request every 10s i thought it was ok to wait for long. I might be totally wrong on this one. But setting up to 10s gives a lot of room. 
+
+If the server response comes after the timeout, it is logged on to sync_time_log file and not included for calculations. 
+
+
+Shape of the Histogram:
+As we know a clock can tick slow or fast. In my case it was slow. it was ticking slow than the sever. On an average it was offset by around 1.4 ms/second. And as we can see from the graph most of the times the correction after is around 1.2ms - 1.4ms. 
